@@ -16,7 +16,7 @@ app.use(express.json()); // substitui body-parser
 app.get("/", (req, res) => {
   res.send("API Rede Social funcionando 🚀");
 });
-
+//f
 // 🔥 Swagger config
 const options = {
   definition: {
