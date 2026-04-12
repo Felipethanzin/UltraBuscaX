@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>UltraBuscaX - Veículos</title>
+    <link rel="stylesheet" href="../css/placa.css">
+</head>
+
+<body>
+
+<header class="header">
+    <div class="logo">
+        <span>🚗 UltraBuscaX</span>
+    </div>
+
+    <nav class="menu">
+        <a href="#">Veículos</a>
+        <a href="#">CNPJ</a>
+        <a href="#">CEP</a>
+    </nav>
+</header>
+
+<div class="main-grid">
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1>Consulta de Veículos</h1>
+        <p>Digite a placa ou código FIPE para consultar informações do veículo em tempo real.</p>
+    </div>
+
+    <!-- FORM -->
+    <div class="form">
+
+        <div class="input-group">
+            <span>🚗</span>
+            <input id="placa" placeholder="Digite o código FIPE (ex: 005340-6)">
+        </div>
+
+        <button onclick="buscar()">Consultar</button>
+
+        <div id="loading" class="loading hidden"></div>
+
+        <div class="resultado-box" id="resultado"></div>
+
+    </div>
+
+</div>
+
+<script>
+async function buscar() {
+    const codigo = document.getElementById("placa").value.trim();
+    const resultado = document.getElementById("resultado");
+    const loading = document.getElementById("loading");
+
+    resultado.innerHTML = "";
+    loading.classList.remove("hidden");
+
+    try {
+        const res = await fetch(`http://localhost:3000/veiculo/${codigo}`);
+        const data = await res.json();
+
+        loading.classList.add("hidden");
+
+        if (!data.success) {
+            resultado.innerHTML = "<p>Erro na consulta ❌</p>";
+            return;
+        }
+
+        const info = data.dados[0];
+
+        resultado.innerHTML = `
+            <div class="grid">
+
+                <div>
+                    <strong>Marca</strong>
+                    <span>${info.marca}</span>
+                </div>
+
+                <div>
+                    <strong>Modelo</strong>
+                    <span>${info.modelo}</span>
+                </div>
+
+                <div>
+                    <strong>Ano</strong>
+                    <span>${info.ano_modelo}</span>
+                </div>
+
+                <div>
+                    <strong>Combustível</strong>
+                    <span>${info.combustivel}</span>
+                </div>
+
+                <div>
+                    <strong>Valor</strong>
+                    <span>${info.valor}</span>
+                </div>
+
+                <div>
+                    <strong>Código FIPE</strong>
+                    <span>${info.codigo_fipe}</span>
+                </div>
+
+            </div>
+        `;
+
+    } catch (err) {
+        loading.classList.add("hidden");
+        resultado.innerHTML = "<p>Erro ao conectar na API ❌</p>";
+    }
+}
+</script>
+
+</body>
+</html>
