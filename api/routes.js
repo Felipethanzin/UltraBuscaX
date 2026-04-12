@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 const users = require("./users");
 
-// 🔐 segredo (melhor usar variável de ambiente)
+// 🔐 segredo (use variável no Render depois)
 const SECRET = process.env.JWT_SECRET || "segredo_super";
 
 /**
@@ -36,10 +36,18 @@ function authMiddleware(req, res, next) {
  */
 router.post("/register", async (req, res) => {
   try {
-    const { nome, email, password } = req.body;
+    let { nome, email, password } = req.body;
+
+    // 🔥 limpeza básica
+    nome = nome?.trim();
+    email = email?.trim().toLowerCase();
 
     if (!nome || !email || !password) {
       return res.status(400).json({ message: "Preencha todos os campos" });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ message: "Senha deve ter no mínimo 6 caracteres" });
     }
 
     const userExists = users.find(u => u.email === email);
@@ -77,7 +85,9 @@ router.post("/register", async (req, res) => {
  */
 router.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
+
+    email = email?.trim().toLowerCase();
 
     if (!email || !password) {
       return res.status(400).json({ message: "Preencha todos os campos" });
@@ -101,7 +111,12 @@ router.post("/login", async (req, res) => {
 
     return res.json({
       message: "Login realizado com sucesso",
-      token
+      token,
+      user: {
+        id: user.id,
+        nome: user.nome,
+        email: user.email
+      }
     });
 
   } catch (err) {
