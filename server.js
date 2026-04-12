@@ -75,5 +75,10 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
+<<<<<<< HEAD
   console.log(`Servidor rodando na porta ${PORT}`);
 });
+=======
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
+});
+>>>>>>> 01f82a4b39b8e25ed333065b55569acc3b003e09
