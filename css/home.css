@@ -41,14 +41,22 @@ body {
 
 .menu a {
     margin-left: 20px;
-    text-decoration: none;
     color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 0.9rem;
 }
 
 .menu a:hover {
     color: #fff;
 }
 
+/* ================= LAYOUT ================= */
+.main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 40px 8%;
+    gap: 40px;
+}
 /* CONTAINER */
 .container {
     padding: 60px 8%;
