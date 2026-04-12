@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 const users = require("./users");
 
-// 🔐 segredo
 const SECRET = process.env.JWT_SECRET || "segredo_super";
 
 /**
@@ -30,7 +29,7 @@ function authMiddleware(req, res, next) {
     const decoded = jwt.verify(token.trim(), SECRET);
     req.userId = decoded.id;
     next();
-  } catch (err) {
+  } catch {
     return res.status(401).json({
       success: false,
       status: 401,
@@ -40,7 +39,27 @@ function authMiddleware(req, res, next) {
 }
 
 /**
- * 🔥 REGISTRO
+ * @swagger
+ * /api/register:
+ *   post:
+ *     summary: Criar usuário
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nome:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Usuário criado
  */
 router.post("/register", async (req, res) => {
   try {
@@ -92,7 +111,6 @@ router.post("/register", async (req, res) => {
     });
 
   } catch (err) {
-    console.error(err);
     return res.status(500).json({
       success: false,
       status: 500,
@@ -102,7 +120,25 @@ router.post("/register", async (req, res) => {
 });
 
 /**
- * 🔥 LOGIN
+ * @swagger
+ * /api/login:
+ *   post:
+ *     summary: Login do usuário
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login realizado
  */
 router.post("/login", async (req, res) => {
   try {
@@ -154,8 +190,7 @@ router.post("/login", async (req, res) => {
       }
     });
 
-  } catch (err) {
-    console.error(err);
+  } catch {
     return res.status(500).json({
       success: false,
       status: 500,
@@ -165,7 +200,16 @@ router.post("/login", async (req, res) => {
 });
 
 /**
- * 🔥 PERFIL
+ * @swagger
+ * /api/profile:
+ *   get:
+ *     summary: Perfil do usuário
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Dados do usuário
  */
 router.get("/profile", authMiddleware, (req, res) => {
   const user = users.find(u => u.id === req.userId);
@@ -190,7 +234,14 @@ router.get("/profile", authMiddleware, (req, res) => {
 });
 
 /**
- * 🔥 LISTAR USUÁRIOS
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Listar usuários
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: Lista de usuários
  */
 router.get("/users", (req, res) => {
   const lista = users.map(user => ({
