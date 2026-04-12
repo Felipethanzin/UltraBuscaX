@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UltraBuscaX - Painel</title>
+<link rel="stylesheet" href="../css/home.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/906/906175.png">
+        <span>UltraBuscaX</span>
+    </div>
+
+    <nav class="menu">
+        <a href="../home/home.html">🏠 Home</a>
+        <a href="../suporte/suporte.html">🛠️ Suporte</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <div class="hero-text">
+        <h1>🔎 Central de Buscas Inteligentes</h1>
+        <p>Escolha uma ferramenta abaixo para consultar dados em tempo real</p>
+    </div>
+
+    <div class="card-grid">
+
+        <!-- CNPJ -->
+        <div class="card" onclick="openPage('../cnpj/cnpj.html')">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+            <h3>🏢 CNPJ</h3>
+            <p>Consulta completa de empresas</p>
+        </div>
+
+        <!-- CEP -->
+        <div class="card" onclick="openPage('../cep/cep.html')">
+            <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png">
+            <h3>📍 CEP</h3>
+            <p>Endereço completo e localização</p>
+        </div>
+
+        <!-- FUTURO 1 -->
+        <div class="card soon">
+            <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png">
+            <h3>🧠 CPF</h3>
+            <p>Consulta de dados pessoais</p>
+            <span class="tag">Em breve</span>
+        </div>
+
+        <!-- FUTURO 2 -->
+        <div class="card soon">
+            <img src="https://cdn-icons-png.flaticon.com/512/2910/2910791.png">
+            <h3>📞 Telefone</h3>
+            <p>Informações de contato</p>
+            <span class="tag">Em breve</span>
+        </div>
+
+    </div>
+
+</main>
+
+<script>
+function openPage(page) {
+    window.location.href = page;
+}
+</script>
+
+</body>
+</html>

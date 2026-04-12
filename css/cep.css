@@ -1,0 +1,224 @@
+/* ================= RESET ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Arial;
+}
+
+body {
+    background: radial-gradient(circle at 10% 20%, rgba(0, 100, 255, 0.12), transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 255, 100, 0.08), transparent 40%),
+                #000;
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ================= HEADER ================= */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    backdrop-filter: blur(10px);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo img {
+    width: 30px;
+    filter: invert(1);
+}
+
+.logo span {
+    font-weight: bold;
+    font-size: 1.1rem;
+    background: linear-gradient(to right, #fff, #888);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.menu a {
+    margin-left: 20px;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.menu a:hover {
+    color: #fff;
+}
+
+/* ================= LAYOUT ================= */
+.main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 40px 8%;
+    gap: 40px;
+}
+
+/* ================= HERO ================= */
+.hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+}
+
+.hero p {
+    color: rgba(255,255,255,0.7);
+    max-width: 400px;
+}
+
+.hero img {
+    width: 200px;
+    opacity: 0.7;
+}
+
+/* ================= FORM CARD ================= */
+.form {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+/* TITULO */
+.form h2 {
+    font-size: 1.4rem;
+}
+
+/* ================= INPUT ================= */
+.input-group {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.input-group span {
+    margin-right: 10px;
+    opacity: 0.6;
+}
+
+.input-group input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    width: 100%;
+}
+
+/* ================= BUTTON ================= */
+button {
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    background: linear-gradient(135deg, #fff, #ccc);
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(255,255,255,0.1);
+}
+
+/* ================= RESULTADO ================= */
+.resultado-box {
+    margin-top: 10px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.grid div {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 12px;
+    border-radius: 10px;
+    transition: 0.2s;
+}
+
+.grid div:hover {
+    background: rgba(255,255,255,0.06);
+}
+
+.grid strong {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.5);
+}
+
+.grid span {
+    font-size: 0.9rem;
+}
+
+/* ================= MAPA ================= */
+#map {
+    height: 260px;
+    border-radius: 12px;
+    margin-top: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* ================= LOADING ================= */
+.loading {
+    width: 25px;
+    height: 25px;
+    border: 3px solid rgba(255,255,255,0.2);
+    border-top: 3px solid #fff;
+    border-radius: 50%;
+    margin: 10px auto;
+    animation: spin 1s linear infinite;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ================= SCROLL ================= */
+.form::-webkit-scrollbar {
+    width: 5px;
+}
+
+.form::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+}
+
+/* ================= RESPONSIVO ================= */
+@media (max-width: 900px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        display: none;
+    }
+}

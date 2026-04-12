@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEP - UltraBuscaX</title>
+
+<link rel="stylesheet" href="../css/cep.css">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+#map {
+    height: 260px;
+    border-radius: 12px;
+    margin-top: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+</style>
+
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png">
+        <span>UltraBuscaX</span>
+    </div>
+
+    <nav class="menu">
+        <a href="../home/home.html">🏠 Home</a>
+        <a href="../suporte/suporte.html">📞 Suporte</a>
+    </nav>
+</header>
+
+<main class="main-grid">
+
+    <div class="hero">
+        <h1>📍 Busca de CEP</h1>
+        <p>Consulte endereço completo com mapa em tempo real</p>
+
+        <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png">
+    </div>
+
+    <div class="form">
+
+        <h2>Pesquisar CEP</h2>
+
+        <div class="input-group">
+            <span>📍</span>
+            <input id="cep" type="text" placeholder="00000-000" maxlength="9" oninput="mask(this)">
+        </div>
+
+        <button onclick="buscarCEP()">Buscar</button>
+
+        <div id="loading" class="loading hidden"></div>
+
+        <div id="resultado" class="resultado-box"></div>
+
+        <div id="map"></div>
+
+    </div>
+
+</main>
+
+<script>
+let map;
+let marker;
+
+// máscara
+function mask(input) {
+    let v = input.value.replace(/\D/g,"");
+    v = v.replace(/^(\d{5})(\d)/,"$1-$2");
+    input.value = v;
+}
+
+async function buscarCEP() {
+    const cep = document.getElementById("cep").value.replace(/\D/g,"");
+    const loading = document.getElementById("loading");
+    const resultado = document.getElementById("resultado");
+
+    if (cep.length !== 8) {
+        resultado.innerHTML = "<p>CEP inválido</p>";
+        return;
+    }
+
+    loading.classList.remove("hidden");
+
+    try {
+        const res = await fetch(`https://brasilapi.com.br/api/cep/v1/${cep}`);
+        const data = await res.json();
+
+        loading.classList.add("hidden");
+
+        resultado.innerHTML = `
+            <div class="grid">
+                <div><strong>Rua</strong><span>${data.street || "-"}</span></div>
+                <div><strong>Bairro</strong><span>${data.neighborhood || "-"}</span></div>
+                <div><strong>Cidade</strong><span>${data.city || "-"}</span></div>
+                <div><strong>UF</strong><span>${data.state || "-"}</span></div>
+            </div>
+        `;
+
+        carregarMapa(data);
+
+    } catch (e) {
+        loading.classList.add("hidden");
+        resultado.innerHTML = "<p>Erro ao buscar CEP</p>";
+    }
+}
+
+// 🔥 MAPA CORRIGIDO (SEM RJ BUGADO)
+function carregarMapa(data) {
+
+    const query = `${data.neighborhood}, ${data.city}, ${data.state}, Brazil`;
+
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`)
+    .then(r => r.json())
+    .then(loc => {
+
+        let lat = loc?.[0]?.lat;
+        let lon = loc?.[0]?.lon;
+
+        // fallback inteligente (evita mapa quebrado)
+        if (!lat || !lon) {
+            lat = -14.2350;
+            lon = -51.9253;
+        }
+
+        if (!map) {
+            map = L.map('map').setView([lat, lon], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+        } else {
+            map.setView([lat, lon], 13);
+        }
+
+        if (marker) marker.remove();
+
+        marker = L.marker([lat, lon])
+            .addTo(map)
+            .bindPopup(`📍 ${data.city}`)
+            .openPopup();
+
+    });
+}
+</script>
+
+</body>
+</html>
