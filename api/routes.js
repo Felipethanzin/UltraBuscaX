@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 const users = require("./users");
 
-// 🔐 segredo (use variável no Render depois)
+// 🔐 segredo
 const SECRET = process.env.JWT_SECRET || "segredo_super";
 
 /**
@@ -15,7 +15,11 @@ function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    return res.status(401).json({ message: "Token não fornecido" });
+    return res.status(401).json({
+      success: false,
+      status: 401,
+      message: "Token não fornecido"
+    });
   }
 
   const token = authHeader.startsWith("Bearer ")
@@ -27,7 +31,11 @@ function authMiddleware(req, res, next) {
     req.userId = decoded.id;
     next();
   } catch (err) {
-    return res.status(401).json({ message: "Token inválido" });
+    return res.status(401).json({
+      success: false,
+      status: 401,
+      message: "Token inválido"
+    });
   }
 }
 
@@ -38,21 +46,32 @@ router.post("/register", async (req, res) => {
   try {
     let { nome, email, password } = req.body;
 
-    // 🔥 limpeza básica
     nome = nome?.trim();
     email = email?.trim().toLowerCase();
 
     if (!nome || !email || !password) {
-      return res.status(400).json({ message: "Preencha todos os campos" });
+      return res.status(400).json({
+        success: false,
+        status: 400,
+        message: "Preencha todos os campos"
+      });
     }
 
     if (password.length < 6) {
-      return res.status(400).json({ message: "Senha deve ter no mínimo 6 caracteres" });
+      return res.status(400).json({
+        success: false,
+        status: 400,
+        message: "Senha deve ter no mínimo 6 caracteres"
+      });
     }
 
     const userExists = users.find(u => u.email === email);
     if (userExists) {
-      return res.status(400).json({ message: "Email já cadastrado" });
+      return res.status(400).json({
+        success: false,
+        status: 400,
+        message: "Email já cadastrado"
+      });
     }
 
     const hash = await bcrypt.hash(password, 10);
@@ -66,15 +85,17 @@ router.post("/register", async (req, res) => {
 
     users.push(user);
 
-    console.log("USUÁRIOS:", users);
-
     return res.status(201).json({
+      success: true,
+      status: 201,
       message: "Usuário criado com sucesso"
     });
 
   } catch (err) {
     console.error(err);
     return res.status(500).json({
+      success: false,
+      status: 500,
       message: "Erro interno no servidor"
     });
   }
@@ -90,17 +111,29 @@ router.post("/login", async (req, res) => {
     email = email?.trim().toLowerCase();
 
     if (!email || !password) {
-      return res.status(400).json({ message: "Preencha todos os campos" });
+      return res.status(400).json({
+        success: false,
+        status: 400,
+        message: "Preencha todos os campos"
+      });
     }
 
     const user = users.find(u => u.email === email);
     if (!user) {
-      return res.status(400).json({ message: "Usuário não encontrado" });
+      return res.status(400).json({
+        success: false,
+        status: 400,
+        message: "Usuário não encontrado"
+      });
     }
 
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) {
-      return res.status(400).json({ message: "Senha inválida" });
+      return res.status(400).json({
+        success: false,
+        status: 400,
+        message: "Senha inválida"
+      });
     }
 
     const token = jwt.sign(
@@ -109,7 +142,9 @@ router.post("/login", async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    return res.json({
+    return res.status(200).json({
+      success: true,
+      status: 200,
       message: "Login realizado com sucesso",
       token,
       user: {
@@ -122,25 +157,35 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(500).json({
+      success: false,
+      status: 500,
       message: "Erro interno no servidor"
     });
   }
 });
 
 /**
- * 🔥 PERFIL (PROTEGIDO)
+ * 🔥 PERFIL
  */
 router.get("/profile", authMiddleware, (req, res) => {
   const user = users.find(u => u.id === req.userId);
 
   if (!user) {
-    return res.status(404).json({ message: "Usuário não encontrado" });
+    return res.status(404).json({
+      success: false,
+      status: 404,
+      message: "Usuário não encontrado"
+    });
   }
 
-  res.json({
-    id: user.id,
-    nome: user.nome,
-    email: user.email
+  return res.status(200).json({
+    success: true,
+    status: 200,
+    data: {
+      id: user.id,
+      nome: user.nome,
+      email: user.email
+    }
   });
 });
 
@@ -154,7 +199,11 @@ router.get("/users", (req, res) => {
     email: user.email
   }));
 
-  res.json(lista);
+  return res.status(200).json({
+    success: true,
+    status: 200,
+    data: lista
+  });
 });
 
 module.exports = router;
