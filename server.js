@@ -9,8 +9,11 @@ const routes = require("./api/routes");
 const app = express();
 
 // 🔥 Middlewares
-app.use(cors());
-app.use(express.json()); // substitui body-parser
+app.use(cors({
+  origin: "*" // libera acesso externo (se quiser restringir depois eu te mostro)
+}));
+
+app.use(express.json());
 
 // 🔥 Rota raiz
 app.get("/", (req, res) => {
@@ -36,7 +39,7 @@ const options = {
       }
     }
   },
-  apis: [path.join(__dirname, "api", "*.js")], // 🔥 corrigido
+  apis: [path.join(__dirname, "api", "*.js")],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
@@ -45,8 +48,9 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // 🔥 Rotas
 app.use("/api", routes);
 
-// 🔥 Start servidor
-const PORT = 3000;
+// 🔥 Start servidor (CORRIGIDO PRO RENDER)
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
