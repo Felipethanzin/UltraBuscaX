@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
   res.send("API Rede Social funcionando 🚀");
 });
 
-// 🔥 Rota de status (opcional - útil pra monitoramento)
+// 🔥 Rota de status
 app.get("/status", (req, res) => {
   res.json({
     status: "online",
@@ -39,7 +39,7 @@ const options = {
     },
     servers: [
       {
-        url: "https://ultrabuscax-1.onrender.com", // 🔥 SUA URL ONLINE
+        url: "https://ultrabuscax-1.onrender.com",
       },
       {
         url: "http://localhost:3000",
@@ -64,21 +64,16 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // 🔥 Rotas da API
 app.use("/api", routes);
 
-// 🔥 Rota 404 (importante)
+// 🔥 Rota 404
 app.use((req, res) => {
   res.status(404).json({
     erro: "Rota não encontrada"
   });
 });
 
-// 🔥 Start servidor (CORRIGIDO PRO RENDER)
+// 🔥 Start servidor (CORRETO PRO RENDER)
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-<<<<<<< HEAD
   console.log(`Servidor rodando na porta ${PORT}`);
 });
-=======
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
->>>>>>> 01f82a4b39b8e25ed333065b55569acc3b003e09
