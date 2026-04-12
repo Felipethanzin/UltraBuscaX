@@ -10,45 +10,56 @@
 
 <body>
 
-    <header class="header">
-        <div class="logo">
-            <img src="https://cdn-icons-png.flaticon.com/512/906/906175.png" alt="logo">
-            <span>UltraBuscaX</span>
+<header class="header">
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/906/906175.png" alt="logo">
+        <span>UltraBuscaX</span>
+    </div>
+
+    <div class="menu-toggle" id="mobile-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <nav class="menu" id="nav-menu">
+        <a href="../login/login.html">Login</a>
+        <a href="../suporte/suporte.html">Suporte</a>
+    </nav>
+</header>
+
+<main class="container">
+    <form class="form" id="formCadastro">
+        <h2>Criar Conta</h2>
+        <p style="color: rgba(255,255,255,0.5); margin-bottom: 20px; font-size: 0.9rem;">
+            Preencha os dados abaixo
+        </p>
+
+        <input id="nome" type="text" placeholder="Digite seu nome" required>
+        <input id="email" type="email" placeholder="Digite seu e-mail" required>
+        <input id="senha" type="password" placeholder="Digite sua senha" required>
+        <input id="confirmarSenha" type="password" placeholder="Confirme sua senha" required>
+
+        <button type="submit">Criar Conta</button>
+
+        <p id="mensagem" style="margin-top:10px;"></p>
+
+        <div style="margin-top: 20px; font-size: 0.85rem;">
+            <span style="color: rgba(255,255,255,0.6);">Já tem uma conta?</span>
+            <a href="../login/login.html"
+                style="color: #fff; text-decoration: none; font-weight: bold; margin-left: 5px;">
+                Faça Login
+            </a>
         </div>
+    </form>
+</main>
 
-        <div class="menu-toggle" id="mobile-menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-
-        <nav class="menu" id="nav-menu">
-            <a href="../login/login.html">Login</a>
-            <a href="../suporte/suporte.html">Suporte</a>
-        </nav>
-    </header>
-
-    <main class="container">
-           <form class="form" id="formCadastro">
-            <h2>Criar Conta</h2>
-            <p style="color: rgba(255,255,255,0.5); margin-bottom: 20px; font-size: 0.9rem;">Preencha os dados abaixo
-            </p>
-
-            <input id="nome" type="text" placeholder="Digite seu nome" required>
-            <input id="email" type="email" placeholder="Digite seu e-mail" required>
-            <input id="senha" type="password" placeholder="Digite sua senha" required>
-            <input id="confirmarSenha" type="password" placeholder="Confirme sua senha" required>
-            <button type="submit">Criar Conta</button>
-
-            <div style="margin-top: 20px; font-size: 0.85rem;">
-                <span style="color: rgba(255,255,255,0.6);">Já tem uma conta?</span>
-                <a href="../login/login.html"
-                    style="color: #fff; text-decoration: none; font-weight: bold; margin-left: 5px;">Faça Login</a>
-            </div>
-        </form>
-    </main>
 <script>
 const form = document.getElementById("formCadastro");
+const mensagem = document.getElementById("mensagem");
+
+// 🔥 SUA API ONLINE
+const API_URL = "https://ultrabuscax-1.onrender.com";
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -58,13 +69,17 @@ form.addEventListener("submit", async (e) => {
     const senha = document.getElementById("senha").value;
     const confirmarSenha = document.getElementById("confirmarSenha").value;
 
+    // 🔥 validação
     if (senha !== confirmarSenha) {
-        alert("As senhas não coincidem!");
+        mensagem.style.color = "red";
+        mensagem.innerText = "As senhas não coincidem!";
         return;
     }
 
+    mensagem.innerText = "Criando conta...";
+
     try {
-        const response = await fetch("http://localhost:3000/api/register", {
+        const response = await fetch(`${API_URL}/api/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -79,19 +94,25 @@ form.addEventListener("submit", async (e) => {
         const data = await response.json();
 
         if (response.ok) {
-            alert("Conta criada com sucesso!");
-            window.location.href = "../login/login.html";
+            mensagem.style.color = "green";
+            mensagem.innerText = "Conta criada com sucesso! 🚀";
+
+            setTimeout(() => {
+                window.location.href = "../login/login.html";
+            }, 1500);
+
         } else {
-            alert(data.message);
+            mensagem.style.color = "red";
+            mensagem.innerText = data.message || "Erro ao cadastrar";
         }
 
     } catch (err) {
         console.error(err);
-        alert("Erro ao conectar com servidor");
+        mensagem.style.color = "red";
+        mensagem.innerText = "Erro ao conectar com servidor";
     }
 });
 </script>
 
 </body>
-
 </html>

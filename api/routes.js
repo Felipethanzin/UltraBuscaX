@@ -5,7 +5,8 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 const users = require("./users");
 
-const SECRET = "segredo_super";
+// 🔐 segredo (melhor usar variável de ambiente)
+const SECRET = process.env.JWT_SECRET || "segredo_super";
 
 /**
  * 🔐 Middleware de autenticação
@@ -31,108 +32,88 @@ function authMiddleware(req, res, next) {
 }
 
 /**
- * @swagger
- * /api/register:
- *   post:
- *     summary: Cadastro de usuário
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               nome:
- *                 type: string
- *                 example: João
- *               email:
- *                 type: string
- *                 example: joao@email.com
- *               password:
- *                 type: string
- *                 example: 123456
+ * 🔥 REGISTRO
  */
 router.post("/register", async (req, res) => {
-  const { nome, email, password } = req.body || {};
+  try {
+    const { nome, email, password } = req.body;
 
-  if (!nome || !email || !password) {
-    return res.status(400).json({ message: "Preencha todos os campos" });
+    if (!nome || !email || !password) {
+      return res.status(400).json({ message: "Preencha todos os campos" });
+    }
+
+    const userExists = users.find(u => u.email === email);
+    if (userExists) {
+      return res.status(400).json({ message: "Email já cadastrado" });
+    }
+
+    const hash = await bcrypt.hash(password, 10);
+
+    const user = {
+      id: users.length + 1,
+      nome,
+      email,
+      password: hash,
+    };
+
+    users.push(user);
+
+    console.log("USUÁRIOS:", users);
+
+    return res.status(201).json({
+      message: "Usuário criado com sucesso"
+    });
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: "Erro interno no servidor"
+    });
   }
-
-  const userExists = users.find(u => u.email === email);
-  if (userExists) {
-    return res.status(400).json({ message: "Email já cadastrado" });
-  }
-
-  const hash = await bcrypt.hash(password, 10);
-
-  const user = {
-    id: users.length + 1,
-    nome,
-    email,
-    password: hash,
-  };
-
-  users.push(user);
-
-  console.log("USUÁRIOS:", users); // debug
-
-  res.json({ message: "Usuário criado com sucesso" });
 });
 
 /**
- * @swagger
- * /api/login:
- *   post:
- *     summary: Login do usuário
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *                 example: joao@email.com
- *               password:
- *                 type: string
- *                 example: 123456
+ * 🔥 LOGIN
  */
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body || {};
+  try {
+    const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ message: "Preencha todos os campos" });
+    if (!email || !password) {
+      return res.status(400).json({ message: "Preencha todos os campos" });
+    }
+
+    const user = users.find(u => u.email === email);
+    if (!user) {
+      return res.status(400).json({ message: "Usuário não encontrado" });
+    }
+
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) {
+      return res.status(400).json({ message: "Senha inválida" });
+    }
+
+    const token = jwt.sign(
+      { id: user.id },
+      SECRET,
+      { expiresIn: "1h" }
+    );
+
+    return res.json({
+      message: "Login realizado com sucesso",
+      token
+    });
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: "Erro interno no servidor"
+    });
   }
-
-  const user = users.find(u => u.email === email);
-  if (!user) {
-    return res.status(400).json({ message: "Usuário não encontrado" });
-  }
-
-  const valid = await bcrypt.compare(password, user.password);
-  if (!valid) {
-    return res.status(400).json({ message: "Senha inválida" });
-  }
-
-  const token = jwt.sign({ id: user.id }, SECRET, {
-    expiresIn: "1h",
-  });
-
-  res.json({ token });
 });
 
 /**
- * @swagger
- * /api/profile:
- *   get:
- *     summary: Perfil do usuário
- *     tags: [Auth]
- *     security:
- *       - bearerAuth: []
+ * 🔥 PERFIL (PROTEGIDO)
  */
 router.get("/profile", authMiddleware, (req, res) => {
   const user = users.find(u => u.id === req.userId);
@@ -149,14 +130,7 @@ router.get("/profile", authMiddleware, (req, res) => {
 });
 
 /**
- * @swagger
- * /api/users:
- *   get:
- *     summary: Listar todos os usuários
- *     tags: [Auth]
- *     responses:
- *       200:
- *         description: Lista de usuários
+ * 🔥 LISTAR USUÁRIOS
  */
 router.get("/users", (req, res) => {
   const lista = users.map(user => ({

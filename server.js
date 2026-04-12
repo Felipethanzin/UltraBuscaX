@@ -10,14 +10,22 @@ const app = express();
 
 // 🔥 Middlewares
 app.use(cors({
-  origin: "*" // libera acesso externo (se quiser restringir depois eu te mostro)
+  origin: "*" // libera acesso do seu site
 }));
 
 app.use(express.json());
 
-// 🔥 Rota raiz
+// 🔥 Rota raiz (teste da API)
 app.get("/", (req, res) => {
   res.send("API Rede Social funcionando 🚀");
+});
+
+// 🔥 Rota de status (opcional - útil pra monitoramento)
+app.get("/status", (req, res) => {
+  res.json({
+    status: "online",
+    mensagem: "API rodando normalmente 🚀"
+  });
 });
 
 // 🔥 Swagger config
@@ -29,6 +37,14 @@ const options = {
       version: "1.0.0",
       description: "API de login e cadastro",
     },
+    servers: [
+      {
+        url: "https://ultrabuscax-1.onrender.com", // 🔥 SUA URL ONLINE
+      },
+      {
+        url: "http://localhost:3000",
+      }
+    ],
     components: {
       securitySchemes: {
         bearerAuth: {
@@ -45,8 +61,15 @@ const options = {
 const swaggerSpec = swaggerJsdoc(options);
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// 🔥 Rotas
+// 🔥 Rotas da API
 app.use("/api", routes);
+
+// 🔥 Rota 404 (importante)
+app.use((req, res) => {
+  res.status(404).json({
+    erro: "Rota não encontrada"
+  });
+});
 
 // 🔥 Start servidor (CORRIGIDO PRO RENDER)
 const PORT = process.env.PORT || 3000;
