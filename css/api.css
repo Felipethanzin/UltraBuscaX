@@ -1,0 +1,268 @@
+/* ================= RESET ================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:
+    radial-gradient(circle at 10% 20%, rgba(0,100,255,.12), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(0,255,100,.08), transparent 40%),
+    #000;
+    color:#fff;
+    min-height:100vh;
+    width:100%;
+    overflow-x:hidden;
+}
+
+/* ================= HEADER ================= */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 8%;
+    gap:20px;
+    flex-wrap:wrap;
+    backdrop-filter:blur(10px);
+}
+
+.logo{
+    font-size:1.2rem;
+    font-weight:bold;
+    word-break:break-word;
+}
+
+.menu{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+}
+
+.menu a{
+    color:rgba(255,255,255,.7);
+    text-decoration:none;
+    font-size:.95rem;
+    transition:.3s;
+}
+
+.menu a:hover{
+    color:#fff;
+}
+
+/* ================= LAYOUT ================= */
+.main-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    padding:40px 8%;
+    align-items:center;
+}
+
+/* ================= HERO ================= */
+.hero{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:20px;
+}
+
+.hero h1{
+    font-size:clamp(2rem,5vw,3rem);
+    line-height:1.2;
+}
+
+.hero p{
+    color:rgba(255,255,255,.7);
+    max-width:500px;
+    line-height:1.7;
+    font-size:1rem;
+}
+
+/* ================= FORM ================= */
+.form{
+    width:100%;
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.08);
+    backdrop-filter:blur(20px);
+    padding:30px;
+    border-radius:20px;
+}
+
+/* INPUT */
+.input-group{
+    display:flex;
+    align-items:center;
+    padding:14px;
+    border-radius:12px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.input-group input{
+    width:100%;
+    background:none;
+    border:none;
+    outline:none;
+    color:#fff;
+    font-size:16px;
+}
+
+/* BUTTON */
+button{
+    width:100%;
+    margin-top:15px;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    font-weight:bold;
+    font-size:1rem;
+    cursor:pointer;
+    background:linear-gradient(135deg,#fff,#bbb);
+    transition:.3s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+/* ================= RESULTADO ================= */
+.resultado-box{
+    margin-top:20px;
+    width:100%;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.grid div{
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.06);
+    padding:14px;
+    border-radius:12px;
+    word-break:break-word;
+}
+
+.grid strong{
+    display:block;
+    font-size:.75rem;
+    color:rgba(255,255,255,.5);
+    margin-bottom:5px;
+}
+
+.grid span{
+    font-size:.95rem;
+    line-height:1.4;
+}
+
+/* ================= LOADING ================= */
+.loading{
+    width:28px;
+    height:28px;
+    border:3px solid rgba(255,255,255,.2);
+    border-top:3px solid #fff;
+    border-radius:50%;
+    margin:20px auto;
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg);}
+}
+
+.hidden{
+    display:none;
+}
+
+/* ================= TABLET ================= */
+@media(max-width:992px){
+
+    .main-grid{
+        grid-template-columns:1fr;
+        gap:30px;
+    }
+
+    .hero{
+        text-align:center;
+        align-items:center;
+    }
+
+    .hero p{
+        max-width:100%;
+    }
+}
+
+/* ================= MOBILE ================= */
+@media(max-width:768px){
+
+    .header{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .menu{
+        justify-content:center;
+    }
+
+    .main-grid{
+        padding:30px 5%;
+    }
+
+    .form{
+        padding:22px;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .hero h1{
+        font-size:2rem;
+    }
+}
+
+/* ================= SMALL MOBILE ================= */
+@media(max-width:480px){
+
+    .header{
+        padding:18px 5%;
+    }
+
+    .main-grid{
+        padding:25px 4%;
+    }
+
+    .form{
+        padding:18px;
+        border-radius:16px;
+    }
+
+    .input-group{
+        padding:12px;
+    }
+
+    .input-group input{
+        font-size:15px;
+    }
+
+    button{
+        padding:14px;
+        font-size:.95rem;
+    }
+
+    .hero h1{
+        font-size:1.6rem;
+    }
+
+    .hero p{
+        font-size:.95rem;
+    }
+}

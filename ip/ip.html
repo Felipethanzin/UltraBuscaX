@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consulta de IP</title>
+
+<link rel="stylesheet" href="../css/api.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">🌐UltraBuscaX</div>
+
+  <nav class="menu">
+        <a href="../home/home.html">🏠 Home</a>
+        <a href="../suporte/suporte.html">📞 Suporte</a>
+    </nav>
+</header>
+
+<section class="main-grid">
+
+    <div class="hero">
+        <h1>Consulta de IP em tempo real</h1>
+        <p>
+            Descubra país, cidade, provedor, localização aproximada e dados técnicos digitando qualquer IP público.
+        </p>
+    </div>
+
+    <div class="form">
+
+        <div class="input-group">
+            <input type="text" id="ip" placeholder="Digite o IP Ex: 8.8.8.8">
+        </div>
+
+        <button onclick="buscarIP()">Consultar IP</button>
+
+        <div id="loading" class="loading hidden"></div>
+
+        <div class="resultado-box" id="resultado"></div>
+
+    </div>
+
+</section>
+
+<script>
+async function buscarIP(){
+
+    let ip = document.getElementById("ip").value.trim();
+    let resultado = document.getElementById("resultado");
+    let loading = document.getElementById("loading");
+
+    if(ip === ""){
+        alert("Digite um IP.");
+        return;
+    }
+
+    resultado.innerHTML = "";
+    loading.classList.remove("hidden");
+
+    try{
+
+        let req = await fetch(`http://ip-api.com/json/${ip}?fields=status,message,country,regionName,city,zip,lat,lon,timezone,isp,query`);
+        let data = await req.json();
+
+        loading.classList.add("hidden");
+
+        if(data.status === "fail"){
+            resultado.innerHTML = "<p>IP inválido ou não encontrado.</p>";
+            return;
+        }
+
+        resultado.innerHTML = `
+        <div class="grid">
+
+            <div><strong>IP</strong><span>${data.query}</span></div>
+            <div><strong>PAÍS</strong><span>${data.country}</span></div>
+            <div><strong>ESTADO</strong><span>${data.regionName}</span></div>
+            <div><strong>CIDADE</strong><span>${data.city}</span></div>
+            <div><strong>CEP</strong><span>${data.zip}</span></div>
+            <div><strong>PROVEDOR</strong><span>${data.isp}</span></div>
+            <div><strong>LATITUDE</strong><span>${data.lat}</span></div>
+            <div><strong>LONGITUDE</strong><span>${data.lon}</span></div>
+            <div><strong>FUSO</strong><span>${data.timezone}</span></div>
+
+        </div>
+        `;
+
+    }catch(e){
+        loading.classList.add("hidden");
+        resultado.innerHTML = "<p>Erro ao consultar IP.</p>";
+    }
+}
+</script>
+
+</body>
+</html>
