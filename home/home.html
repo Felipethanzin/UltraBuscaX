@@ -27,7 +27,7 @@
 
         <div class="codigo" id="codigoAcesso">000000</div>
 
-        <p class="info">⏳ Aguardando liberação pelo sistema...</p>
+        <p class="info" id="mensagemAcesso">⏳ Aguardando liberação pelo sistema...</p>
 
         <button onclick="verificarAcesso()">🔄 Verificar acesso</button>
     </div>
@@ -77,21 +77,21 @@
 </main>
 
 <script>
-let acessoLiberado = localStorage.getItem("acessoUltraBuscaX") === "liberado";
+let acessoLiberado = sessionStorage.getItem("acessoUltraBuscaX") === "liberado";
 
-let codigo = localStorage.getItem("codigoUltraBuscaX");
+let codigo = sessionStorage.getItem("codigoUltraBuscaX");
 
 if (!codigo) {
     codigo = Math.random().toString(36).substring(2, 8).toUpperCase();
-    localStorage.setItem("codigoUltraBuscaX", codigo);
+    sessionStorage.setItem("codigoUltraBuscaX", codigo);
 }
 
 document.getElementById("codigoAcesso").innerText = codigo;
 
-function liberarPainel() {
+function liberarPainel(mostrarMensagem = false) {
     acessoLiberado = true;
 
-    localStorage.setItem("acessoUltraBuscaX", "liberado");
+    sessionStorage.setItem("acessoUltraBuscaX", "liberado");
 
     document.getElementById("modalAcesso").style.display = "none";
     document.getElementById("painel").classList.remove("bloqueado");
@@ -99,15 +99,32 @@ function liberarPainel() {
     document.querySelectorAll(".card").forEach(card => {
         card.classList.remove("locked");
     });
+
+    if (mostrarMensagem) {
+        console.log("✅ Acesso liberado com sucesso!");
+    }
+}
+
+function bloquearPainel() {
+    acessoLiberado = false;
+
+    document.getElementById("modalAcesso").style.display = "flex";
+    document.getElementById("painel").classList.add("bloqueado");
+
+    document.querySelectorAll(".card").forEach(card => {
+        card.classList.add("locked");
+    });
 }
 
 if (acessoLiberado) {
-    liberarPainel();
+    liberarPainel(false);
+} else {
+    bloquearPainel();
 }
 
 function openPage(page) {
     if (!acessoLiberado) {
-        alert("🔒 Acesso bloqueado! Libere pelo bot do Telegram primeiro.");
+        document.getElementById("mensagemAcesso").innerText = "🔒 Libere o acesso primeiro usando o código acima.";
         return;
     }
 
@@ -115,19 +132,23 @@ function openPage(page) {
 }
 
 async function verificarAcesso() {
+    const mensagem = document.getElementById("mensagemAcesso");
+
     try {
+        mensagem.innerText = "🔎 Verificando código...";
+
         const resposta = await fetch("https://ultrabuscax-1.onrender.com/api/verificar-codigo/" + codigo);
         const resultado = await resposta.json();
 
         if (resultado.liberado === true) {
-            liberarPainel();
-            alert("✅ Acesso liberado com sucesso!");
+            mensagem.innerText = "✅ Acesso liberado com sucesso!";
+            liberarPainel(true);
         } else {
-            alert("⏳ Código ainda não foi liberado pelo Telegram.");
+            mensagem.innerText = "⏳ Código ainda não foi liberado. Verifique no Python/Telegram.";
         }
 
     } catch (erro) {
-        alert("❌ Erro ao verificar acesso com a API.");
+        mensagem.innerText = "❌ Erro ao verificar acesso com a API.";
         console.log(erro);
     }
 }
