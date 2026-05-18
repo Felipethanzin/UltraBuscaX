@@ -77,11 +77,33 @@
 </main>
 
 <script>
-let acessoLiberado = false;
+let acessoLiberado = localStorage.getItem("acessoUltraBuscaX") === "liberado";
 
-const codigo = Math.random().toString(36).substring(2, 8).toUpperCase();
+let codigo = localStorage.getItem("codigoUltraBuscaX");
+
+if (!codigo) {
+    codigo = Math.random().toString(36).substring(2, 8).toUpperCase();
+    localStorage.setItem("codigoUltraBuscaX", codigo);
+}
 
 document.getElementById("codigoAcesso").innerText = codigo;
+
+function liberarPainel() {
+    acessoLiberado = true;
+
+    localStorage.setItem("acessoUltraBuscaX", "liberado");
+
+    document.getElementById("modalAcesso").style.display = "none";
+    document.getElementById("painel").classList.remove("bloqueado");
+
+    document.querySelectorAll(".card").forEach(card => {
+        card.classList.remove("locked");
+    });
+}
+
+if (acessoLiberado) {
+    liberarPainel();
+}
 
 function openPage(page) {
     if (!acessoLiberado) {
@@ -98,15 +120,7 @@ async function verificarAcesso() {
         const resultado = await resposta.json();
 
         if (resultado.liberado === true) {
-            acessoLiberado = true;
-
-            document.getElementById("modalAcesso").style.display = "none";
-            document.getElementById("painel").classList.remove("bloqueado");
-
-            document.querySelectorAll(".card").forEach(card => {
-                card.classList.remove("locked");
-            });
-
+            liberarPainel();
             alert("✅ Acesso liberado com sucesso!");
         } else {
             alert("⏳ Código ainda não foi liberado pelo Telegram.");
@@ -117,9 +131,6 @@ async function verificarAcesso() {
         console.log(erro);
     }
 }
-
-// verifica automaticamente a cada 5 segundos
-setInterval(verificarAcesso, 5000);
 </script>
 
 </body>
