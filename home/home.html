@@ -20,7 +20,20 @@
     </nav>
 </header>
 
-<main class="container">
+<div class="modal-acesso" id="modalAcesso">
+    <div class="modal-box">
+        <h2>🔐 Verificação de Acesso</h2>
+        <p>Para liberar as ferramentas, envie este código no bot do Telegram:</p>
+
+        <div class="codigo" id="codigoAcesso">000000</div>
+
+        <p class="info">⏳ Aguardando liberação pelo sistema...</p>
+
+        <button onclick="verificarAcesso()">🔄 Verificar acesso</button>
+    </div>
+</div>
+
+<main class="container bloqueado" id="painel">
 
     <div class="hero-text">
         <h1>🔎 Central de Buscas Inteligentes</h1>
@@ -29,34 +42,34 @@
 
     <div class="card-grid">
 
-        <!-- CNPJ -->
-        <div class="card" onclick="openPage('../cnpj/cnpj.html')">
+        <div class="card locked" onclick="openPage('../cnpj/cnpj.html')">
             <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
             <h3>🏢 CNPJ</h3>
             <p>Consulta completa de empresas</p>
         </div>
 
-        <!-- CEP -->
-        <div class="card" onclick="openPage('../cep/cep.html')">
+        <div class="card locked" onclick="openPage('../cep/cep.html')">
             <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png">
             <h3>📍 CEP</h3>
             <p>Endereço completo e localização</p>
         </div>
 
-        <!-- FUTURO 1 -->
-        <div class="card" onclick="openPage('../ip/ip.html')">
+        <div class="card locked" onclick="openPage('../ip/ip.html')">
             <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png">
             <h3>🧠 Consulta de IP</h3>
-            <p>Localização por IP | Consulta de IP Online</p>
-           
+            <p>Localização por IP</p>
         </div>
 
-        <!-- FUTURO 2 -->
-             <div class="card" onclick="openPage('../cpf/cpf.html')">
+        <div class="card locked" onclick="openPage('../cpf/cpf.html')">
             <img src="https://cdn-icons-png.flaticon.com/512/2910/2910791.png">
             <h3>🧠 Consulta de CPF</h3>
-            <p>Informações Pessoal</p>
-            
+            <p>Informações pessoais</p>
+        </div>
+
+        <div class="card locked" onclick="openPage('../inter/inter.html')">
+            <img src="https://cdn-icons-png.flaticon.com/512/2910/2910791.png">
+            <h3>⚡ Teste de Velocidade</h3>
+            <p>Teste de velocidade da internet</p>
         </div>
 
     </div>
@@ -64,9 +77,49 @@
 </main>
 
 <script>
+let acessoLiberado = false;
+
+const codigo = Math.random().toString(36).substring(2, 8).toUpperCase();
+
+document.getElementById("codigoAcesso").innerText = codigo;
+
 function openPage(page) {
+    if (!acessoLiberado) {
+        alert("🔒 Acesso bloqueado! Libere pelo bot do Telegram primeiro.");
+        return;
+    }
+
     window.location.href = page;
 }
+
+async function verificarAcesso() {
+    try {
+        const resposta = await fetch("https://ultrabuscax-1.onrender.com/api/verificar-codigo/" + codigo);
+        const resultado = await resposta.json();
+
+        if (resultado.liberado === true) {
+            acessoLiberado = true;
+
+            document.getElementById("modalAcesso").style.display = "none";
+            document.getElementById("painel").classList.remove("bloqueado");
+
+            document.querySelectorAll(".card").forEach(card => {
+                card.classList.remove("locked");
+            });
+
+            alert("✅ Acesso liberado com sucesso!");
+        } else {
+            alert("⏳ Código ainda não foi liberado pelo Telegram.");
+        }
+
+    } catch (erro) {
+        alert("❌ Erro ao verificar acesso com a API.");
+        console.log(erro);
+    }
+}
+
+// verifica automaticamente a cada 5 segundos
+setInterval(verificarAcesso, 5000);
 </script>
 
 </body>

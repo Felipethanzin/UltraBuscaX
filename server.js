@@ -59,9 +59,71 @@ const options = {
 };
 
 const swaggerSpec = swaggerJsdoc(options);
+
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// 🔥 Rotas da API
+/* =======================================================
+   🔐 SISTEMA DE LIBERAÇÃO DE ACESSO
+======================================================= */
+
+let codigosLiberados = [];
+
+// 🔓 Liberar acesso
+app.post("/api/liberar-acesso", (req, res) => {
+
+  const { email, codigo } = req.body;
+
+  if (!email || !codigo) {
+
+    return res.status(400).json({
+      liberado: false,
+      mensagem: "Email e código obrigatórios"
+    });
+
+  }
+
+  codigosLiberados.push({
+    email,
+    codigo: codigo.toUpperCase()
+  });
+
+  console.log("✅ Código liberado:", codigo);
+
+  res.json({
+    liberado: true,
+    mensagem: "Acesso liberado com sucesso!"
+  });
+
+});
+
+// 🔎 Verificar código
+app.get("/api/verificar-codigo/:codigo", (req, res) => {
+
+  const codigo = req.params.codigo.toUpperCase();
+
+  const encontrado = codigosLiberados.find(
+    item => item.codigo === codigo
+  );
+
+  if (encontrado) {
+
+    return res.json({
+      liberado: true,
+      email: encontrado.email
+    });
+
+  }
+
+  res.json({
+    liberado: false
+  });
+
+});
+
+/* =======================================================
+   🔥 ROTAS PRINCIPAIS
+======================================================= */
+
 app.use("/api", routes);
 
 // 🔥 Rota 404
@@ -71,7 +133,7 @@ app.use((req, res) => {
   });
 });
 
-// 🔥 Start servidor (CORRETO PRO RENDER)
+// 🔥 Start servidor
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {

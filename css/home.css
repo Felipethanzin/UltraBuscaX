@@ -12,6 +12,83 @@ body {
     color: #fff;
 }
 
+.modal-acesso {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modal-box {
+    width: 90%;
+    max-width: 420px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+}
+
+.modal-box h2 {
+    margin-bottom: 15px;
+}
+
+.modal-box p {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.95rem;
+}
+
+.codigo {
+    margin: 25px 0;
+    padding: 18px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.1);
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 6px;
+    color: #00ff88;
+    border: 1px solid rgba(0,255,136,0.4);
+}
+
+.modal-box button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #00ff88, #0066ff);
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-box button:hover {
+    opacity: 0.85;
+}
+
+.bloqueado {
+    filter: blur(3px);
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.locked::after {
+    content: "🔒 Bloqueado";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255,0,0,0.25);
+    padding: 5px 10px;
+    font-size: 0.7rem;
+    border-radius: 8px;
+    color: #fff;
+}
+
 /* HEADER */
 .header {
     display: flex;
