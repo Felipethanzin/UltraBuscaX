@@ -8,43 +8,83 @@
 </head>
 <body>
 
-    <header class="header">
-        <div class="logo">
-            <img src="https://cdn-icons-png.flaticon.com/512/906/906175.png" alt="logo">
-            <span>UltraBuscaX</span>
+<header class="header">
+    <div class="logo" onclick="window.location.href='../home/home.html'">
+        <img src="https://cdn-icons-png.flaticon.com/512/906/906175.png" alt="Logo UltraBuscaX">
+
+        <div class="logo-text">
+            <h1>UltraBuscaX</h1>
+            <p>Central de Suporte</p>
+        </div>
+    </div>
+
+    <div class="menu-toggle" id="mobile-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <nav class="menu" id="nav-menu">
+        <a href="../home/home.html">🏠 Home</a>
+        <a href="../suporte/suporte.html">📞 Suporte</a>
+    </nav>
+</header>
+
+<main class="container">
+    <section class="support-card">
+        <div class="support-info">
+            <span class="badge">Atendimento UltraBuscaX</span>
+            <h1>Precisa de ajuda?</h1>
+            <p>
+                Envie sua dúvida, erro ou sugestão. Nossa equipe analisará sua solicitação
+                para melhorar sua experiência no sistema.
+            </p>
+
+            <div class="info-list">
+                <div>✅ Problemas de acesso</div>
+                <div>🔐 Liberação de conta</div>
+                <div>🛠 Erros nas ferramentas</div>
+                <div>💡 Sugestões de melhoria</div>
+            </div>
         </div>
 
-        <div class="menu-toggle" id="mobile-menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-
-        <nav class="menu" id="nav-menu">
-            <a href="../home/home.html">Home</a>
-           
-        </nav>
-    </header>
-
-    <main class="container">
         <form class="form">
-            <h2>Suporte</h2>
-            <input type="text" placeholder="Seu nome" required>
-            <input type="email" placeholder="Seu e-mail" required>
-            <input type="text" placeholder="Assunto" required>
-            <textarea placeholder="Descreva seu problema..." required></textarea>
-            <button type="submit">Enviar</button>
+            <h2>📞 Suporte</h2>
+
+            <div class="input-group">
+                <span>👤</span>
+                <input type="text" placeholder="Seu nome" required>
+            </div>
+
+            <div class="input-group">
+                <span>📧</span>
+                <input type="email" placeholder="Seu e-mail" required>
+            </div>
+
+            <div class="input-group">
+                <span>📌</span>
+                <input type="text" placeholder="Assunto" required>
+            </div>
+
+            <div class="input-group textarea-group">
+                <span>💬</span>
+                <textarea placeholder="Descreva seu problema..." required></textarea>
+            </div>
+
+            <button type="submit">Enviar solicitação</button>
         </form>
-    </main>
+    </section>
+</main>
 
-    <script>
-        const menuToggle = document.getElementById('mobile-menu');
-        const navMenu = document.getElementById('nav-menu');
+<script>
+    const menuToggle = document.getElementById("mobile-menu");
+    const navMenu = document.getElementById("nav-menu");
 
-        menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('active');
-            navMenu.classList.toggle('active');
-        });
-    </script>
+    menuToggle.addEventListener("click", () => {
+        menuToggle.classList.toggle("active");
+        navMenu.classList.toggle("active");
+    });
+</script>
+
 </body>
 </html>

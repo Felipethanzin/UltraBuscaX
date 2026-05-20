@@ -1,207 +1,342 @@
-/* ============================================================
-   1. RESET E CONFIGURAÇÕES GLOBAIS
-   ============================================================ */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',Roboto,Arial,sans-serif;
 }
 
-body {
-    background-color: #000;
-    color: #fff;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background: radial-gradient(circle at 10% 20%, rgba(0, 100, 255, 0.12), transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 255, 100, 0.08), transparent 40%),
-                #000;
-    overflow-x: hidden;
+html{
+scroll-behavior:smooth;
 }
 
-/* ============================================================
-   2. HEADER E LOGO
-   ============================================================ */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 8%;
-    z-index: 100;
-    position: relative;
+body{
+background:
+radial-gradient(circle at 15% 20%, rgba(0,255,136,.12), transparent 35%),
+radial-gradient(circle at 85% 80%, rgba(0,132,255,.12), transparent 35%),
+linear-gradient(135deg,#020202,#070707,#0c0c0c);
+color:#fff;
+min-height:100vh;
+overflow-x:hidden;
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+.header{
+width:100%;
+min-height:82px;
+padding:0 8%;
+display:flex;
+align-items:center;
+justify-content:space-between;
+background:rgba(5,5,5,.75);
+backdrop-filter:blur(18px);
+border-bottom:1px solid rgba(0,255,136,.25);
+box-shadow:0 10px 35px rgba(0,0,0,.45);
+position:sticky;
+top:0;
+z-index:999;
 }
 
-.logo img { 
-    width: 32px; 
-    filter: brightness(0) invert(1); 
+.logo{
+display:flex;
+align-items:center;
+gap:14px;
+cursor:pointer;
+transition:.3s ease;
 }
 
-.logo span { 
-    font-weight: bold; 
-    font-size: 1.2rem; 
-    letter-spacing: 1px; 
-    background: linear-gradient(to right, #fff, #888);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.logo:hover{
+transform:scale(1.03);
 }
 
-/* ============================================================
-   3. MENU DESKTOP E HAMBÚRGUER
-   ============================================================ */
-.menu {
-    display: flex;
-    align-items: center;
+.logo img{
+width:52px;
+height:52px;
+padding:9px;
+border-radius:18px;
+background:linear-gradient(135deg,rgba(0,255,136,.18),rgba(0,132,255,.12));
+border:1px solid rgba(0,255,136,.35);
+box-shadow:0 0 25px rgba(0,255,136,.18);
 }
 
-.menu a {
-    color: rgba(255, 255, 255, 0.7);
-    text-decoration: none;
-    margin-left: 25px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: 0.3s ease;
+.logo-text h1{
+font-size:25px;
+font-weight:800;
+color:#00ff88;
+letter-spacing:.5px;
 }
 
-.menu a:hover { 
-    color: #fff; 
+.logo-text p{
+color:rgba(255,255,255,.55);
+font-size:12px;
+margin-top:2px;
 }
 
-/* Estilo do Botão Hambúrguer */
-.menu-toggle {
-    display: none;
-    flex-direction: column;
-    cursor: pointer;
-    gap: 6px;
-    z-index: 120;
+.menu{
+display:flex;
+align-items:center;
+gap:12px;
 }
 
-.menu-toggle span {
-    width: 25px;
-    height: 2px;
-    background-color: #fff;
-    transition: 0.4s;
+.menu a{
+color:rgba(255,255,255,.85);
+text-decoration:none;
+padding:11px 17px;
+border-radius:999px;
+font-size:14px;
+font-weight:700;
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.08);
+transition:.3s ease;
 }
 
-/* ============================================================
-   4. CONTEÚDO PRINCIPAL (FORMULÁRIO)
-   ============================================================ */
-.container {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+.menu a:hover{
+color:#000;
+background:#00ff88;
+border-color:#00ff88;
+box-shadow:0 0 22px rgba(0,255,136,.45);
+transform:translateY(-2px);
 }
 
-.form {
-    background: rgba(255, 255, 255, 0.03);
-    padding: 40px;
-    border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    width: 100%;
-    max-width: 480px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-    animation: fadeIn 0.8s ease-out;
+.menu-toggle{
+display:none;
+flex-direction:column;
+gap:6px;
+cursor:pointer;
+z-index:1001;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+.menu-toggle span{
+width:28px;
+height:3px;
+background:#00ff88;
+border-radius:999px;
+transition:.3s ease;
 }
 
-.form h2 {
-    font-size: 2rem;
-    margin-bottom: 10px;
-    text-align: center;
-    background: linear-gradient(180deg, #fff 0%, #aaa 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.container{
+min-height:calc(100vh - 82px);
+display:flex;
+align-items:center;
+justify-content:center;
+padding:55px 8%;
 }
 
-.form input, .form textarea {
-    width: 100%;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    color: #fff;
-    outline: none;
-    transition: 0.3s;
+.support-card{
+width:100%;
+max-width:1050px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:35px;
+align-items:center;
 }
 
-.form textarea { height: 100px; resize: none; }
-
-.form input:focus, .form textarea:focus {
-    border-color: rgba(255, 255, 255, 0.4);
-    background: rgba(255, 255, 255, 0.08);
+.support-info{
+background:rgba(255,255,255,.035);
+border:1px solid rgba(255,255,255,.08);
+border-radius:26px;
+padding:34px;
+backdrop-filter:blur(18px);
+box-shadow:0 25px 70px rgba(0,0,0,.35);
 }
 
-.form button {
-    padding: 16px;
-    background: #fff;
-    color: #000;
-    border: none;
-    border-radius: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.3s;
-    margin-top: 10px;
+.badge{
+display:inline-block;
+padding:8px 14px;
+border-radius:999px;
+background:rgba(0,255,136,.1);
+border:1px solid rgba(0,255,136,.25);
+color:#00ff88;
+font-size:.8rem;
+font-weight:800;
+margin-bottom:18px;
 }
 
-.form button:hover {
-    background: #e0e0e0;
-    transform: translateY(-2px);
+.support-info h1{
+font-size:clamp(2rem,5vw,3.2rem);
+line-height:1.1;
+font-weight:900;
+background:linear-gradient(135deg,#fff,#00ff88);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
-/* ============================================================
-   5. RESPONSIVIDADE (MENU MOBILE)
-   ============================================================ */
-@media (max-width: 768px) {
-    .menu-toggle { display: flex; }
+.support-info p{
+color:rgba(255,255,255,.68);
+line-height:1.8;
+margin-top:18px;
+}
 
-    .menu {
-        display: none;
-        position: absolute;
-        top: 70px;
-        right: 8%;
-        width: 180px;
-        background: #111;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 15px;
-        flex-direction: column;
-        padding: 10px 0;
-        box-shadow: 0 15px 30px rgba(0,0,0,0.8);
-        opacity: 0;
-        transform: translateY(-10px);
-        transition: all 0.3s ease;
-    }
+.info-list{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-top:24px;
+}
 
-    .menu.active {
-        display: flex;
-        opacity: 1;
-        transform: translateY(0);
-    }
+.info-list div{
+background:rgba(255,255,255,.045);
+border:1px solid rgba(255,255,255,.08);
+border-radius:16px;
+padding:14px;
+font-size:.9rem;
+}
 
-    .menu a {
-        margin: 0;
-        padding: 15px 20px;
-        width: 100%;
-    }
+.form{
+background:rgba(255,255,255,.045);
+border:1px solid rgba(255,255,255,.09);
+backdrop-filter:blur(22px);
+padding:32px;
+border-radius:26px;
+display:flex;
+flex-direction:column;
+gap:16px;
+box-shadow:0 25px 70px rgba(0,0,0,.45);
+}
 
-    /* Animação do X */
-    .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
-    .menu-toggle.active span:nth-child(2) { opacity: 0; }
-    .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+.form h2{
+font-size:1.5rem;
+font-weight:800;
+color:#00ff88;
+}
+
+.input-group{
+display:flex;
+align-items:center;
+padding:15px;
+border-radius:16px;
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.09);
+transition:.3s ease;
+}
+
+.input-group:focus-within{
+border-color:#00ff88;
+box-shadow:0 0 18px rgba(0,255,136,.18);
+}
+
+.input-group span{
+margin-right:10px;
+opacity:.75;
+}
+
+.input-group input,
+.input-group textarea{
+width:100%;
+background:transparent;
+border:none;
+outline:none;
+color:#fff;
+font-size:15px;
+}
+
+.input-group textarea{
+height:120px;
+resize:none;
+}
+
+.textarea-group{
+align-items:flex-start;
+}
+
+.input-group input::placeholder,
+.input-group textarea::placeholder{
+color:rgba(255,255,255,.42);
+}
+
+.form button{
+width:100%;
+padding:16px;
+border:none;
+border-radius:16px;
+font-weight:900;
+font-size:1rem;
+cursor:pointer;
+color:#000;
+background:linear-gradient(135deg,#00ff88,#00c8ff);
+transition:.3s ease;
+box-shadow:0 15px 35px rgba(0,255,136,.18);
+}
+
+.form button:hover{
+transform:translateY(-3px);
+box-shadow:0 20px 45px rgba(0,255,136,.3);
+}
+
+@media(max-width:900px){
+.header{
+padding:18px 5%;
+}
+
+.menu-toggle{
+display:flex;
+}
+
+.menu{
+position:absolute;
+top:82px;
+right:5%;
+width:230px;
+display:none;
+flex-direction:column;
+align-items:stretch;
+background:rgba(8,8,8,.96);
+border:1px solid rgba(0,255,136,.22);
+border-radius:20px;
+padding:12px;
+box-shadow:0 20px 50px rgba(0,0,0,.65);
+}
+
+.menu.active{
+display:flex;
+}
+
+.menu a{
+margin:0;
+width:100%;
+text-align:center;
+}
+
+.menu-toggle.active span:nth-child(1){
+transform:rotate(45deg) translate(6px,6px);
+}
+
+.menu-toggle.active span:nth-child(2){
+opacity:0;
+}
+
+.menu-toggle.active span:nth-child(3){
+transform:rotate(-45deg) translate(7px,-7px);
+}
+
+.support-card{
+grid-template-columns:1fr;
+}
+
+.container{
+padding:35px 5%;
+}
+}
+
+@media(max-width:600px){
+.logo img{
+width:46px;
+height:46px;
+}
+
+.logo-text h1{
+font-size:21px;
+}
+
+.info-list{
+grid-template-columns:1fr;
+}
+
+.support-info,
+.form{
+padding:24px;
+border-radius:22px;
+}
+
+.support-info h1{
+font-size:2rem;
+}
 }
